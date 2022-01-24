@@ -1,4 +1,4 @@
-# repo name
+# 8by8
 with this repository you can interact with some pixel art stuffs in solidity.
 
 ### `/web`
