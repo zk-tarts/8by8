@@ -18,3 +18,6 @@ if you want to edit the webpage then i suggest just starting from scratch there 
 ### Whats the point?
 I sort of burnt out on this one but i was thinking maybe something game-related to store the items or the assets on chain.  
 Another idea I had was something of a mix between nifty.ink and a nouns-like daily auction where each day a blank canvas is sold and then u draw the art for it
+
+## where'd you get this idea / further reading?
+thanks to https://georgjz.github.io/snesaa03/ and https://codepen.io/shshaw/post/vector-pixels-svg-optimization-animation-and-understanding-path-data
