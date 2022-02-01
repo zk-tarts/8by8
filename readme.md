@@ -4,7 +4,8 @@ with this repository you can interact with some pixel art stuffs in solidity.
 ### `/web`
 if you open the webpage at page.html,  
 you can draw your own 8 by 8 pixel arts with up to 4 colours and have them stored in a format that fits in 1 256 bit word.  
-this website is really bare bones
+this website is really bare bones.  
+During development I used the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) vscode extension to see the webpage
 
 ### `/src`
 pixelArt.sol takes an input picture and gives you an svg 
@@ -17,7 +18,7 @@ if you want to edit the webpage then i suggest just starting from scratch there 
 
 ### Whats the point?
 I sort of burnt out on this one but i was thinking maybe something game-related to store the items or the assets on chain.  
-Another idea I had was something of a mix between nifty.ink and a nouns-like daily auction where each day a blank canvas is sold and then u draw the art for it
+Another idea I had was something of a mix between [nifty.ink](https://nifty.ink) and a [nouns](https://nouns.wtf)-like daily auction where each day a blank canvas is sold and then u draw the art for it
 
 ## where'd you get this idea / further reading?
 thanks to https://georgjz.github.io/snesaa03/ and https://codepen.io/shshaw/post/vector-pixels-svg-optimization-animation-and-understanding-path-data
