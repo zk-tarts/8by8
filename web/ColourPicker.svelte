@@ -61,15 +61,15 @@
             
             <linearGradient id="g0" gradientTransform="rotate(90)">
                 <stop offset="0%" stop-color="#000"/>
-                <stop offset="100%"stop-color="#fff"/>
+                <stop offset="100%"stop-color="rgba(0,0,0,0)"/>
             </linearGradient>
             <linearGradient id="g1" gradientTransform="rotate(30)">
-                <stop offset="0%" stop-color="#000"/>
-                <stop offset="100%" stop-color="#000"/>
+                <stop offset="0%" stop-color="#fff"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
             </linearGradient>
-            <linearGradient id="g2" gradientTransform="rotate(-30)">
-                <stop offset="0%" stop-color="#000"/>
-                <stop offset="100%" stop-color="red"/>
+            <linearGradient id="g2" class="colour_t" gradientTransform="rotate(-30)">
+                <stop offset="0%" stop-color={c}/>
+                <stop offset="100%" stop-color={c}/>
             </linearGradient>
         
         </defs>
@@ -90,8 +90,8 @@
     .tri{
         isolation: isolate;
     }
-    .tri>* {
-        mix-blend-mode: screen;
+    .colour_t {
+        mix-blend-mode: hue;
     }
     .whl {
         min-height: 100%;
