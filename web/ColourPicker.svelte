@@ -1,5 +1,8 @@
 <script>
     // https://gitlab.gnome.org/GNOME/gimp/-/blob/master/modules/gimpcolorwheel.c
+    // feel like its safe to say this svg implementation won't work
+    // I will redo from scratch with canvas or webgl unless I can figure it out 
+
     let h,s,v
     let cx=50
     let cy=50

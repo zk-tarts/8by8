@@ -1,10 +1,17 @@
 
 <script>
+    import {onMount} from 'svelte'
     let canvas
     let selected = "colour1"
-    let colours = new Map([["colour1","red"],["colour2","red"],["colour3","red"],["colour4","red"]])
+    let colours = new Map([["colour1","#000"],["colour2","#000"],["colour3","#000"],["colour4","#000"]])
     $: colour = colours.get(selected)
 	
+    onMount(()=> { // this is stupid I have to add 64 event listeners to prevent dragging
+        for (const child of canvas.children) {
+            child.addEventListener("dragstart", e=>e.preventDefault())
+        }
+    })
+
     function mouse_draw(e) {
         if (e.buttons != 1) {
             return
@@ -15,7 +22,7 @@
     function draw(pix) {
         if (!pix.childElementCount) { // stops fill when border clicked
             pix.style.background=colour
-            pix.setAttribute("class", selected)
+            pix.setAttribute("c", selected)
         }
     }
 
@@ -24,18 +31,22 @@
     }
 
     function repaint() {
-        colours.set(selected,"purple")
-		colour=colours.get(selected) // I don't know why but this needs to be here
+        colour=colours.get(selected) // I don't know why but this needs to be here
         for (const child of canvas.children) {
-            if (child.getAttribute("class") == selected) {
+            if (child.getAttribute("c") == selected) {
                 draw(child)
             }
         }
     }
 
+    function pick(e) {
+        colours.set(selected,e.target.value)
+        colours=colours
+        repaint()
+    }
+
 </script>
 
-<p on:click={repaint}>{selected} {colour}</p>
 <div class="container">
     <div class="pcanvas" on:pointerdown={mouse_draw} on:pointermove={mouse_draw} bind:this={canvas}>
         <div/><div/><div/><div/><div/><div/><div/><div/>
@@ -47,34 +58,43 @@
         <div/><div/><div/><div/><div/><div/><div/><div/>
         <div/><div/><div/><div/><div/><div/><div/><div/>
     </div>
-    <div class="colourbuttons" >
+    <div class="colourbuttons">
         <button id="colour1" class="colourButton" on:click={change_col}>1</button>
         <button id="colour2" class="colourButton" on:click={change_col}>2</button>
         <button id="colour3" class="colourButton" on:click={change_col}>3</button>
         <button id="colour4" class="colourButton" on:click={change_col}>4</button>
     </div>
 </div>
+<div class="pick">
+    <input type="color" on:change={pick}/> <!--TODO: put a nice looking colour picker here-->  
+</div>
 
 <style>
 .container {
-    height: 50%;
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    margin: 20%
 }
 .pcanvas {
-    border: 0.5rem solid black;
-    height: 100%;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr ;
-    gap: 0;
+    outline: 0.4rem groove black;
+    margin: 10%;
+    grid-template: repeat(8,1fr) / repeat(8,1fr);
     display: grid;
+}
+.pcanvas>* {
+    aspect-ratio: 1 / 1;	
 }
 .colourbuttons {
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4,1fr);
     justify-items: center;
 }
 .colourButton {
-    min-width: 50%;
-    min-height: 2rem;
+    width: 60%;
 } 
+.pick {
+    display: flex;
+    justify-content: center;
+}
+
 </style>
