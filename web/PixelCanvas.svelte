@@ -1,16 +1,10 @@
 
 <script>
-    import {onMount} from 'svelte'
     let canvas
     let selected = "colour1"
     let colours = new Map([["colour1","#000"],["colour2","#000"],["colour3","#000"],["colour4","#000"]])
     $: colour = colours.get(selected)
 	
-    onMount(()=> { // this is stupid I have to add 64 event listeners to prevent dragging
-        for (const child of canvas.children) {
-            child.addEventListener("dragstart", e=>e.preventDefault())
-        }
-    })
 
     function mouse_draw(e) {
         if (e.buttons != 1) {
@@ -48,7 +42,7 @@
 </script>
 
 <div class="container">
-    <div class="pcanvas" on:pointerdown={mouse_draw} on:pointermove={mouse_draw} bind:this={canvas}>
+    <div class="pcanvas" on:dragstart={e=>e.preventDefault()} on:pointerdown={mouse_draw} on:pointermove={mouse_draw} bind:this={canvas}>
         <div/><div/><div/><div/><div/><div/><div/><div/>
         <div/><div/><div/><div/><div/><div/><div/><div/>
         <div/><div/><div/><div/><div/><div/><div/><div/>
