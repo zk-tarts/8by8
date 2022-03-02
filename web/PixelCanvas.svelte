@@ -1,10 +1,12 @@
 
 <script>
     let canvas
-    let selected = "colour1"
-    let colours = new Map([["colour1","#000"],["colour2","#000"],["colour3","#000"],["colour4","#000"]])
+    import { chain, izip  } from "./itertools";
+    let selected = "colour0"
+    let colours = new Map([["colour0","#000000"],["colour1","#1b1b1b"],["colour2","#9c9c9c"],["colour3","#afafaf"]])
     $: colour = colours.get(selected)
 	
+    let res=""
 
     function mouse_draw(e) {
         if (e.buttons != 1) {
@@ -39,8 +41,57 @@
         repaint()
     }
 
+
+    function color_to_num(col) {
+        return parseInt(col[col.length-1]) // change color to number
+    }
+
+    
+    // don't know if this generator stuff is better than working with arrays but I think its COOLER!!
+    function* get_split_canvas() {
+        // changes all colour to numbers
+        function* num_iter() {
+            for (const child of canvas.children) { // from top left to bottom right
+                yield color_to_num(child.getAttribute("c"))
+            }   
+        }
+
+        for (const num of num_iter()) {
+            yield function*(l=num&1,r=(num>>1)&1) {yield l; yield r}() 
+        }
+    }
+
+    function* bit_iter_to_hex(bits) {
+        // every 4 bits, collect into one hex char
+        let i = 1;
+        let tmp = []
+        for (const bit of bits) {
+            tmp.push(bit)
+            if (i%4==0) {
+                let binaryString = tmp.join("")
+                yield parseInt(binaryString,2).toString(16)
+                tmp=[]
+            }
+            i++
+        }
+    }
+
+    function calculate(){
+        for (const child of canvas.children) {
+            if (!child.getAttribute("c")) {
+                alert("colour all tiles") // TODO: instead of `alert` use some kind of fancy window flash or custom pop up
+                return
+            }
+        }
+        let x = get_split_canvas()
+        let prefix_removed_colours =  [...colours.values()].map(str=>str.slice(1)).join("")
+        res = "0x"+ [...bit_iter_to_hex(chain(...izip(...x)))].join("") + prefix_removed_colours
+    }
+
 </script>
 
+<button on:click={calculate}></button>
+<p>{res}</p>
 <div class="container">
     <div class="pcanvas" on:dragstart={e=>e.preventDefault()} on:pointerdown={mouse_draw} on:pointermove={mouse_draw} bind:this={canvas}>
         <div/><div/><div/><div/><div/><div/><div/><div/>
@@ -53,10 +104,10 @@
         <div/><div/><div/><div/><div/><div/><div/><div/>
     </div>
     <div class="colourbuttons">
+        <button id="colour0" class="colourButton" on:click={change_col}>0</button>
         <button id="colour1" class="colourButton" on:click={change_col}>1</button>
         <button id="colour2" class="colourButton" on:click={change_col}>2</button>
         <button id="colour3" class="colourButton" on:click={change_col}>3</button>
-        <button id="colour4" class="colourButton" on:click={change_col}>4</button>
     </div>
 </div>
 <div class="pick">
