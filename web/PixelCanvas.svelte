@@ -6,13 +6,14 @@
     let colours = new Map([["colour0","#000000"],["colour1","#1b1b1b"],["colour2","#9c9c9c"],["colour3","#afafaf"]])
     $: colour = colours.get(selected)
 	
-    let res=""
+    let hex="colour all tiles"
 
     function mouse_draw(e) {
         if (e.buttons != 1) {
             return
         }
         draw(e.target)
+        calculate()
     }
 
     function draw(pix) {
@@ -39,6 +40,7 @@
         colours.set(selected,e.target.value)
         colours=colours
         repaint()
+        calculate()
     }
 
 
@@ -57,7 +59,7 @@
         }
 
         for (const num of num_iter()) {
-            yield function*(l=num&1,r=(num>>1)&1) {yield l; yield r}() 
+            yield [num&1,(num>>1)&1] 
         }
     }
 
@@ -79,7 +81,6 @@
     function calculate(){
         for (const child of canvas.children) {
             if (!child.getAttribute("c")) {
-                alert("colour all tiles") // TODO: instead of `alert` use some kind of fancy window flash or custom pop up
                 return
             }
         }
@@ -90,8 +91,7 @@
 
 </script>
 
-<button on:click={calculate}></button>
-<p>{res}</p>
+<h3>{hex}</h3>
 <div class="container">
     <div class="pcanvas" on:dragstart={e=>e.preventDefault()} on:pointerdown={mouse_draw} on:pointermove={mouse_draw} bind:this={canvas}>
         <div/><div/><div/><div/><div/><div/><div/><div/>
@@ -130,7 +130,7 @@
     aspect-ratio: 1 / 1;	
 }
 .colourbuttons {
-    display:grid;
+    display: grid;
     grid-template-columns: repeat(4,1fr);
     justify-items: center;
 }

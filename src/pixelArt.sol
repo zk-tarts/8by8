@@ -78,8 +78,9 @@ contract Art {
         }
 
         bytes memory end = ' "/>\n';
+        // build the string holds the svg
         bytes memory res = bytes.concat('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 8 8" shape-rendering="crispEdges">\n',
-         paths[0],end, paths[1],end, paths[2],end, paths[3],end, '</svg>');
+        paths[0],end, paths[1],end, paths[2],end, paths[3],end, '</svg>');
         return string(res);
     }
 
