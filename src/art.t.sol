@@ -25,10 +25,6 @@ contract ArtTest is DSTest {
         (uint64 a, uint64  b, uint96 c) = art.split(before);
         string memory svg = art.svg(a,b,c);
         string[] memory command = new string[](3);
-        /*
-        command[0] ="./get_output.sh";
-        command[1] ="src/test_encode.py";
-         */
         command[0] ="python3.10";
         command[1] ="src/test_encode.py";
         command[2] = svg;

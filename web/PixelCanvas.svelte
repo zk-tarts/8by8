@@ -65,6 +65,7 @@
 
     function* bit_iter_to_hex(bits) {
         // every 4 bits, collect into one hex char
+        // why not do it all at once? This preserves the leading zeroes
         let i = 1;
         let tmp = []
         for (const bit of bits) {

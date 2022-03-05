@@ -38,9 +38,13 @@ right_plane = list(chain.from_iterable(right_plane))
 
 res ="0x"
 for plane in [left_plane,right_plane]:
-    # this trims leading zeroes needs fix
-    binary_string= "".join(str(bit) for bit in plane)
-    res+=hex(int(binary_string,2))[2:]
+    tmp = []
+    for i,bit in enumerate(plane,1):
+        tmp.append(str(bit))
+        if i%4==0:
+            binary_string= "".join(tmp)
+            res+=hex(int(binary_string,2))[2:]
+            tmp=[]
 res+="".join(colours)
 res= str(int(res,16))
 subprocess.run(["cast","abi-encode","f(uint)",res])

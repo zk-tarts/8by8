@@ -19,4 +19,4 @@ jobs:
           version: nightly
       
       - name: run tests
-        run: forge test --ffi
+        run: forge test --ffi -vvvv
