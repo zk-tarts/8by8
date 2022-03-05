@@ -45,7 +45,7 @@
 
 
     function color_to_num(col) {
-        return parseInt(col[col.length-1]) // change color to number
+        return parseInt(col[col.length-1]) // change color to number by getting last char
     }
 
     
@@ -86,7 +86,7 @@
         }
         let x = get_split_canvas()
         let prefix_removed_colours =  [...colours.values()].map(str=>str.slice(1)).join("")
-        res = "0x"+ [...bit_iter_to_hex(chain(...izip(...x)))].join("") + prefix_removed_colours
+        hex = "0x"+ [...bit_iter_to_hex(chain(...izip(...x)))].join("") + prefix_removed_colours
     }
 
 </script>
