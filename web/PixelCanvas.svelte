@@ -81,7 +81,7 @@ import ColourPicker from "./ColourPicker.svelte";
         }
     }
 
-    function calculate(){
+    function calculate() {
         for (const child of canvas.children) {
             if (!child.getAttribute("c")) {
                 return
