@@ -1,5 +1,7 @@
 
 <script>
+import ColourPicker from "./ColourPicker.svelte";
+
     let canvas
     import { chain, izip  } from "./itertools";
     let selected = "colour0"
@@ -37,7 +39,7 @@
     }
 
     function pick(e) {
-        colours.set(selected,e.target.value)
+        colours.set(selected,e.detail.colour)
         colours=colours
         repaint()
         calculate()
@@ -112,7 +114,7 @@
     </div>
 </div>
 <div class="pick">
-    <input type="color" on:change={pick}/> <!--TODO: put a nice looking colour picker here-->  
+    <ColourPicker on:pick={pick}/> 
 </div>
 
 <style>

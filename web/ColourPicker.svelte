@@ -1,113 +1,72 @@
 <script>
-    // https://gitlab.gnome.org/GNOME/gimp/-/blob/master/modules/gimpcolorwheel.c
-    // feel like its safe to say this svg implementation won't work
-    // I will redo from scratch with canvas or webgl unless I can figure it out 
+    // rgb colour wheel goes like this
+    // ff0000 -> ffff00 -> 00ff00 -> 00ffff -> 0000ff -> ff00ff -> ff0000
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher()
 
-    let h,s,v
-    let cx=50
-    let cy=50
-    let c="red"
-    let theta=0
-    function pick(e){
-        let rgb= hsv_to_rgb(h,s,v)
-        c= rgb
-    }
-    function rot(e){
-        if (e.buttons===1) {
-            let boxBoundingRect = e.target.getBoundingClientRect();
-            let boxCenter= {
-                x: boxBoundingRect.left + boxBoundingRect.width/2, 
-                y: boxBoundingRect.top + boxBoundingRect.height/2
-            };
-            theta = Math.atan2(e.pageX - boxCenter.x, - (e.pageY - boxCenter.y) )*(180 / Math.PI);
+    let [h,s,l] = [0,0,0]
+    let colour = "#fff"
+
+    // https://drafts.csswg.org/css-color/#hsl-to-rgb
+    function hsl_to_rgbstring(h,s,l) {
+        h *= (180/Math.PI)
+        s /= 100
+        l /= 100
+
+        function f(n) {
+            let k = (n + h/30) % 12
+            let a = s * Math.min(l, 1-l)
+            return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))
         }
-    }
-    function hsv_to_rgb(h,s,v) {
-        let chroma = (1 - Math.abs(2*l -1)) * s
-        let Hprime =h/60
-        let x = chroma * (1 - Math.abs(Hprime % 2 -1 ))
-        let c // colours
-        switch (int(Hprime)) {
-            case 0:
-                c=[chroma,x,0]
-                break;
-            case 1:
-                c=[x,chroma,0]
-                break;  
-            case 2:
-                c=[0,chroma,x]
-                break;
-            case 3:
-                c=[0,x,c]
-                break;
-            case 4:
-                c=[x,0,chroma]
-                break;
-            case 5:
-                c=[chroma,0,x]
-                break;
-            default:
-            // dont get here
-                break;
+        let [r,g,b] = [f(0), f(8), f(4)]
+ 
+        function a(n){
+            str = Math.floor((255*n)).toString(16)
+            if (str.length == 1) str = "0"+str
+            return str 
         }
-        let m = v-chroma
-        return c.map(e=>e-m)
+        return "#" + a(r) + a(g) + a(b)
     }
 
+    function pick(e) {
+        const size = e.target.clientWidth // the circle is circular so width = height
+        const x = e.offsetX
+        const y = e.offsetY
+
+        let theta = Math.atan2(y - size/2, x - size/2)
+        theta = (theta + 2*Math.PI + Math.PI/2) % (2*Math.PI)
+        hsl_to_rgbstring(theta,100,50)
+        colour = `hsl(${theta}rad,100%,50%)` 
+        dispatch('pick',{
+            colour: colour
+        })
+    }
 </script>
-
-
-<div class="picker" >
-    <svg viewBox="0 0 100 100" >
-        <defs>
-            <polygon class="triangle" id="triangle" points="50,15 100,100 0,100"  transform ="rotate({theta},0,0), scale(.74,.74), translate(0,-22) " />
-            
-            <linearGradient id="g0" gradientTransform="rotate(90)">
-                <stop offset="0%" stop-color="#000"/>
-                <stop offset="100%"stop-color="rgba(0,0,0,0)"/>
-            </linearGradient>
-            <linearGradient id="g1" gradientTransform="rotate(30)">
-                <stop offset="0%" stop-color="#fff"/>
-                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </linearGradient>
-            <linearGradient id="g2" class="colour_t" gradientTransform="rotate(-30)">
-                <stop offset="0%" stop-color={c}/>
-                <stop offset="100%" stop-color={c}/>
-            </linearGradient>
-        
-        </defs>
-        <foreignObject width=100 height=100 x=0 y=0>
-            <div class="whl" on:pointerdown={rot} />
-        </foreignObject>
-        <g class="tri">
-            <use href="#triangle" fill="url('#g0')"/>
-            <use href="#triangle" fill="url('#g1')"/>
-            <use href="#triangle" fill="url('#g2')"/>
-        </g>
-        <circle cx={cx} cy={cy} r="1" fill="none" stroke="#000"/>
-    </svg>
+  
+<div class="container" >
+    <div class="wheel" on:pointerdown={pick} />
+    <div class = "hsl" style="background:{colour}">
+        <div>H:{h}</div>
+        <div>S:{s}%</div>
+        <div>L:{l}%</div>
+    </div>
 </div>
 
 
 <style>
-    .tri{
-        isolation: isolate;
+    .container {
+        width: 200px;
+        aspect-ratio: 1 /1 ;
     }
-    .colour_t {
-        mix-blend-mode: hue;
-    }
-    .whl {
+    .wheel {
+        aspect-ratio: 1 /1 ;
         min-height: 100%;
         border-radius: 50%;
-        background: conic-gradient(rgb(255,0,0),rgb(255,255,0), rgb(0,255,0), rgb(0,255,255), rgb(0,0,255), rgb(255,0,255), rgb(255,0,0));
-        clip-path: path("M 50 0 a 50 50 0 0 1 0 100 50 50 0 0 1 0 -100 v 8 a 42 42 0 0 0 0 84 42 42 0 0 0 0 -84");
+        background: conic-gradient(rgb(255,0,0), rgb(255,255,0), rgb(0,255,0), rgb(0,255,255), rgb(0,0,255), rgb(255,0,255), rgb(255,0,0));
     }
-
-    .triangle {
-        transform-origin: center;
-    }
-    .picker {
-        width: 400px;
+    .hsl {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
 </style>
