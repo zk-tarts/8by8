@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.11;
 
 contract Art {
     bytes16 constant hex_chars = "0123456789abcdef";
@@ -26,7 +26,7 @@ contract Art {
     ** here
     */
     function svg(uint64 bitplane_0,uint64 bitplane_1, uint96 colours) public pure returns (string memory) {
-        bytes[4] memory paths = [path(uint24(colours)),path(uint24(colours>>24)),path(uint24(colours>>48)),path(uint24(colours>>72))];
+        bytes[4] memory paths = [path(uint24(colours>>72)),path(uint24(colours>>48)),path(uint24(colours>>24)),path(uint24(colours))];
         // Since this is an 8 by 8 image, the position of any pixel will never be a number with more than one digit.
         // This simplifies the changing from a number to a character because the ASCII codes for numbers zero through nine is '0x30' to '0x39'
         uint n = 0x30;     // n:  the current paths length
@@ -62,6 +62,9 @@ contract Art {
                     // 0x4d = "M"
                     // 0x20 = " "
                     // 0x68 = "h"
+                    // Move to (x,y) go horizontal (n)
+                    // with 'x' as the starting x coordinate, 'y' as y coord and 'n' as distance it looks like below
+                    //                                                     M x   y h n
                     paths[prev] = bytes.concat(paths[prev],bytes6(uint48(0x4d0020006800|(n_sum<<32)|(y<<16)|pn)));
                     
                     // the path starting x coordinate has to be reset after each 
@@ -77,9 +80,9 @@ contract Art {
             
         }
 
-        bytes memory end = ' "/>\n';
+        bytes memory end = ' "/>';
         // build the string holds the svg
-        bytes memory res = bytes.concat('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 8 8" shape-rendering="crispEdges">\n',
+        bytes memory res = bytes.concat('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 8 8" shape-rendering="crispEdges">',
         paths[0],end, paths[1],end, paths[2],end, paths[3],end, '</svg>');
         return string(res);
     }

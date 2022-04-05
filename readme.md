@@ -12,8 +12,9 @@ This may be useful at some point in the future
 `art.t.sol` verifys that the program works as expected
 
 ## Usage
-If wanting to work on solidity, download [`forge`](https://github.com.gakonst/foundry) or [`dapp`](https://github.com/dapphub/dapptools)  
-there isn't much of a use yet its just an idea showcase  
+If wanting to work on solidity, download [foundry](https://github.com.gakonst/foundry) so you can run `forge` and `cast`
+To run the tests, you will need python 3.10 or later.    
+there isn't much of a use yet its just an idea showcase.
 
 
 ### Whats the point?

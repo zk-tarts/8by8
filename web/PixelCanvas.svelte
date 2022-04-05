@@ -1,5 +1,7 @@
 
 <script>
+import ColourPicker from "./ColourPicker.svelte";
+
     let canvas
     import { chain, izip  } from "./itertools";
     let selected = "colour0"
@@ -37,7 +39,7 @@
     }
 
     function pick(e) {
-        colours.set(selected,e.target.value)
+        colours.set(selected,e.detail.colour)
         colours=colours
         repaint()
         calculate()
@@ -45,7 +47,7 @@
 
 
     function color_to_num(col) {
-        return parseInt(col[col.length-1]) // change color to number
+        return parseInt(col[col.length-1]) // change color to number by getting last char
     }
 
     
@@ -65,6 +67,7 @@
 
     function* bit_iter_to_hex(bits) {
         // every 4 bits, collect into one hex char
+        // why not do it all at once? This preserves the leading zeroes
         let i = 1;
         let tmp = []
         for (const bit of bits) {
@@ -78,7 +81,7 @@
         }
     }
 
-    function calculate(){
+    function calculate() {
         for (const child of canvas.children) {
             if (!child.getAttribute("c")) {
                 return
@@ -86,7 +89,7 @@
         }
         let x = get_split_canvas()
         let prefix_removed_colours =  [...colours.values()].map(str=>str.slice(1)).join("")
-        res = "0x"+ [...bit_iter_to_hex(chain(...izip(...x)))].join("") + prefix_removed_colours
+        hex = "0x"+ [...bit_iter_to_hex(chain(...izip(...x)))].join("") + prefix_removed_colours
     }
 
 </script>
@@ -111,7 +114,7 @@
     </div>
 </div>
 <div class="pick">
-    <input type="color" on:change={pick}/> <!--TODO: put a nice looking colour picker here-->  
+    <ColourPicker on:pick={pick}/> 
 </div>
 
 <style>

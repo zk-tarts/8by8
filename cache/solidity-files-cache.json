@@ -1,5 +1,5 @@
 {
-  "_format": "ethers-rs-sol-cache-1",
+  "_format": "ethers-rs-sol-cache-2",
   "files": {
     "/home/me/dapps/art/lib/ds-test/src/test.sol": {
       "lastModificationDate": 1638591836485,
@@ -20,7 +20,8 @@
                 "abi",
                 "evm.bytecode",
                 "evm.deployedBytecode",
-                "evm.methodIdentifiers"
+                "evm.methodIdentifiers",
+                "irOptimized"
               ]
             }
           },
@@ -28,16 +29,16 @@
         }
       },
       "imports": [],
-      "versionPragmas": [
-        ">=0.4.23"
-      ],
-      "artifacts": [
-        "DSTest"
-      ]
+      "versionRequirement": ">=0.4.23",
+      "artifacts": {
+        "DSTest": {
+          "0.8.11+commit.d7f03943.Linux.gcc": "test.sol/DSTest.json"
+        }
+      }
     },
     "/home/me/dapps/art/src/art.t.sol": {
-      "lastModificationDate": 1643061443460,
-      "contentHash": "8291573954363a0056fa7696dd947f9e",
+      "lastModificationDate": 1646451194800,
+      "contentHash": "cda51f021e692c8e933f591608f97a40",
       "sourceName": "src/art.t.sol",
       "solcConfig": {
         "settings": {
@@ -54,7 +55,8 @@
                 "abi",
                 "evm.bytecode",
                 "evm.deployedBytecode",
-                "evm.methodIdentifiers"
+                "evm.methodIdentifiers",
+                "irOptimized"
               ]
             }
           },
@@ -62,19 +64,22 @@
         }
       },
       "imports": [
-        "ds-test/test.sol",
-        "./pixelArt.sol"
+        "lib/ds-test/src/test.sol",
+        "src/pixelArt.sol"
       ],
-      "versionPragmas": [
-        "^0.8.6"
-      ],
-      "artifacts": [
-        "ArtTest"
-      ]
+      "versionRequirement": "^0.8.11",
+      "artifacts": {
+        "ArtTest": {
+          "0.8.11+commit.d7f03943.Linux.gcc": "art.t.sol/ArtTest.json"
+        },
+        "cheat_vm": {
+          "0.8.11+commit.d7f03943.Linux.gcc": "art.t.sol/cheat_vm.json"
+        }
+      }
     },
     "/home/me/dapps/art/src/pixelArt.sol": {
-      "lastModificationDate": 1642995882850,
-      "contentHash": "06c720695fd34d52f51718046c34a08f",
+      "lastModificationDate": 1646433278250,
+      "contentHash": "c511d3e13660a72c8850f9897c043c8f",
       "sourceName": "src/pixelArt.sol",
       "solcConfig": {
         "settings": {
@@ -91,7 +96,8 @@
                 "abi",
                 "evm.bytecode",
                 "evm.deployedBytecode",
-                "evm.methodIdentifiers"
+                "evm.methodIdentifiers",
+                "irOptimized"
               ]
             }
           },
@@ -99,12 +105,12 @@
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.11"
-      ],
-      "artifacts": [
-        "Art"
-      ]
+      "versionRequirement": "^0.8.11",
+      "artifacts": {
+        "Art": {
+          "0.8.11+commit.d7f03943.Linux.gcc": "pixelArt.sol/Art.json"
+        }
+      }
     }
   }
 }
